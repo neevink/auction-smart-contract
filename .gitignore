@@ -1,3 +1,6 @@
+/.states/
+/.deps/
+
 /contracts/artifacts/
 /sctipes/artefacts/
 /tests/artefacts/
