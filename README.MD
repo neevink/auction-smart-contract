@@ -1,4 +1,4 @@
-# Kirill Naavin's avatar NFT collection on IPFS
+# Kirill Neevin's avatar NFT collection on IPFS
 
 | Preview | Metadata Link |
 |---------|---------------|
