@@ -1,0 +1,15 @@
+{
+    "name": "Мой NFT на аукционе",
+    "description": "Уникальный NFT для тестирования смарт-контракта аукциона",
+    "image": "ipfs://bafkreidywm3j4dplj72m2ba5tzre4qd55o4uvnthsvgconyn3v763wze4q",
+    "attributes": [
+        {
+            "trait_type": "Тип",
+            "value": "Аукционный NFT"
+        },
+        {
+            "trait_type": "Редкость",
+            "value": "Уникальный"
+        }
+    ]
+}
