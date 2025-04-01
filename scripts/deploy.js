@@ -24,7 +24,7 @@ async function main() {
 
   // Деплоим контракт аукциона
   const startingPrice = hre.ethers.utils.parseEther("0.1"); // 0.1 ETH
-  const auctionDuration = 86400; // 1 день в секундах
+  const auctionDuration = 300; // 5 минут в секундах
 
   const Auction = await hre.ethers.getContractFactory("Auction");
   const auction = await Auction.deploy(
