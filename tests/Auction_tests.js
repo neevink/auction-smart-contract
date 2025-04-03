@@ -160,4 +160,73 @@ describe("NFT Auction", function () {
       expect(balanceAfter.gt(balanceBefore)).to.be.true;
     });
   });
+
+  // Тестируем завершение аукциона с коротким временем для Remix IDE
+  describe("Auction End", function() {
+    // Деплоим аукцион с очень коротким временем для тестирования
+    it("Should correctly end auction with a winning bid", async function() {
+      // Создаем отдельный аукцион с очень коротким временем
+      const shortDuration = 2; // 2 секунды
+      
+      const shortAuction = await Auction.deploy(
+        simpleNFT.address,
+        nftId,
+        startingPrice,
+        shortDuration
+      );
+      await shortAuction.deployed();
+      
+      // Одобряем для этого аукциона
+      await simpleNFT.approve(shortAuction.address, nftId);
+      
+      // Запускаем аукцион
+      await shortAuction.start();
+      
+      // Делаем ставку
+      const bid = ethers.utils.parseEther("0.2");
+      await shortAuction.connect(bidder1).bid({ value: bid });
+      
+      // Ждем реальное время вместо манипуляции с блокчейном
+      // Функция замедления для Remix
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
+      // Проверяем возможность завершения (должно работать после паузы)
+      await shortAuction.end();
+      
+      // Проверяем статус
+      expect(await shortAuction.state()).to.equal(2); // Ended
+      
+      // Проверяем владельца NFT
+      expect(await simpleNFT.ownerOf(nftId)).to.equal(bidder1.address);
+    });
+    
+    // Тест возврата NFT при отсутствии ставок
+    it("Should return NFT to owner if no bids were made", async function() {
+      // Используем отдельный аукцион с коротким временем
+      const shortDuration = 2; // 2 секунды
+      
+      const noBidsAuction = await Auction.deploy(
+        simpleNFT.address,
+        nftId,
+        startingPrice,
+        shortDuration
+      );
+      await noBidsAuction.deployed();
+      
+      await simpleNFT.approve(noBidsAuction.address, nftId);
+      await noBidsAuction.start();
+      
+      // Ждем реальное время
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
+      // Завершаем аукцион
+      await noBidsAuction.end();
+      
+      // Проверяем статус
+      expect(await noBidsAuction.state()).to.equal(2); // Ended
+      
+      // Проверяем, что NFT вернулся владельцу
+      expect(await simpleNFT.ownerOf(nftId)).to.equal(owner.address);
+    });
+  });
 });
